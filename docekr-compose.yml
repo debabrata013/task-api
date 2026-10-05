@@ -1,6 +1,14 @@
 services:
   mysql-seervice:
     image: mysql:8
+    
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+
     networks:
      - app-network
   app-service:
@@ -15,3 +23,11 @@ services:
 
     depends_on:
       - mysql-service
+    networks:
+    - app-network
+volumes:
+  mysql_data
+networks:
+  app-network:
+
+
